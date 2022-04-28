@@ -20,7 +20,7 @@ namespace CookBook.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                           SELECT Id, Name, Bio, Email, DateCreated
+                           SELECT Id, Name, Bio, Email, CreateTime
                            FROM UserProfile
                            WHERE Id = @Id";
 
@@ -38,12 +38,48 @@ namespace CookBook.Repositories
                                 Name = DbUtils.GetString(reader, "Name"),
                                 Bio = DbUtils.GetString(reader, "Bio"),
                                 Email = DbUtils.GetString(reader, "Email"),
-                                DateCreated = DbUtils.GetDateTime(reader, "DateCreated")
+                                CreateTime = DbUtils.GetDateTime(reader, "CreateTime")
                             };
                         }
 
                         return user;
                     }
+                }
+            }
+        }
+
+        public UserProfile GetByFirebaseUserId(string firebaseUserId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                           SELECT Id, FirebaseUserId, Name, Bio, Email, CreateTime
+                           FROM UserProfile
+                           WHERE FirebaseUserId = @FirebaseuserId";
+
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
+
+                    UserProfile userProfile = null;
+
+                    var reader = cmd.ExecuteReader();
+                    UserProfile user = null;
+                    if (reader.Read())
+                    {
+                        user = new UserProfile()
+                        {
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            Name = DbUtils.GetString(reader, "Name"),
+                            Bio = DbUtils.GetString(reader, "Bio"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            CreateTime = DbUtils.GetDateTime(reader, "CreateTime")
+                        };
+                    }
+                    reader.Close();
+
+                    return userProfile;
                 }
             }
         }
@@ -56,14 +92,13 @@ namespace CookBook.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO UserProfile (FirebaseUserId, Name, Bio, Email, DateCreated)
+                        INSERT INTO UserProfile (FirebaseUserId, Name, Bio, Email, CreateTime)
                         OUTPUT INSERTED.ID
                         VALUES (@Name, @Email, @ImageUrl, @DateCreated)";
 
                     DbUtils.AddParameter(cmd, "@Name", userProfile.Name);
-                    DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
                     DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
-                    DbUtils.AddParameter(cmd, "@DateCreated", userProfile.DateCreated);
+                    DbUtils.AddParameter(cmd, "@CreateTime", userProfile.CreateTime);
 
                     userProfile.Id = (int)cmd.ExecuteScalar();
                 }
@@ -82,13 +117,13 @@ namespace CookBook.Repositories
                            SET Name = @Name,
                                Bio = @Bio,
                                Email = @Email,
-                               DateCreated = @DateCreated
+                               CreateTime = @CreateTime
                          WHERE Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@Name", userProfile.Name);
                     DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
                     DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
-                    DbUtils.AddParameter(cmd, "@DateCreated", userProfile.DateCreated);
+                    DbUtils.AddParameter(cmd, "@CreateTime", userProfile.CreateTime);
 
                     cmd.ExecuteNonQuery();
                 }

@@ -20,6 +20,6 @@ namespace CookBook.Models
         [MaxLength(255)]
         public string Email { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }
