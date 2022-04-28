@@ -17,12 +17,6 @@ namespace CookBook.Controllers
             _userProfileRepository = userProfileRepository;
         }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(_userProfileRepository.GetAllUsers());
-        }
-
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {

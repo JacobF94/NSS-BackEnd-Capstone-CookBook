@@ -7,7 +7,6 @@ namespace CookBook.Repositories
     {
         void Add(UserProfile userProfile);
         void Delete(int id);
-        List<UserProfile> GetAllUsers();
         UserProfile GetUser(int id);
         void Update(UserProfile userProfile);
     }
