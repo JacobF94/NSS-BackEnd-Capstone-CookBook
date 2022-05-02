@@ -12,7 +12,7 @@ namespace CookBook.Repositories
     {
         public UserProfileRepository(IConfiguration configuration) : base(configuration) { }
 
-        public UserProfile GetUser(int id)
+        public UserProfile GetUser(string userName)
         {
             using (var conn = Connection)
             {
@@ -22,9 +22,9 @@ namespace CookBook.Repositories
                     cmd.CommandText = @"
                            SELECT Id, Name, Bio, Email, CreateTime
                            FROM UserProfile
-                           WHERE Id = @Id";
+                           WHERE Name = @userName";
 
-                    DbUtils.AddParameter(cmd, "@Id", id);
+                    DbUtils.AddParameter(cmd, "@userName", userName);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -62,8 +62,6 @@ namespace CookBook.Repositories
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
 
-                    UserProfile userProfile = null;
-
                     var reader = cmd.ExecuteReader();
                     UserProfile user = null;
                     if (reader.Read())
@@ -79,7 +77,7 @@ namespace CookBook.Repositories
                     }
                     reader.Close();
 
-                    return userProfile;
+                    return user;
                 }
             }
         }
