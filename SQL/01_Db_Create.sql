@@ -46,6 +46,7 @@ CREATE TABLE [Recipe] (
   [Id] int PRIMARY KEY IDENTITY(1, 1),
   [Name] nvarchar(255) NOT NULL,
   [Description] nvarchar(255) NOT NULL,
+  [Instructions] nvarchar(255) NOT NULL,
   [PrepTime] int,
   [CreateTime] Datetime NOT NULL,
   [PictureUrl] nvarchar(255),

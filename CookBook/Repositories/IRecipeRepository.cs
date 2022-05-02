@@ -6,5 +6,6 @@ namespace CookBook.Repositories
     public interface IRecipeRepository
     {
         List<Recipe> GetAllRecipes();
+        Recipe GetRecipe(int id);
     }
 }

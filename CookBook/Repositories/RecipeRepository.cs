@@ -48,5 +48,44 @@ namespace CookBook.Repositories
                 }
             }
         }
+        public Recipe GetRecipe(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT r.Id, r.Name, r.Description, r.Instructions, r.PrepTime, r.CreateTime, u.Name as 'UserName'
+                                       FROM Recipe r 
+                                       LEFT JOIN UserProfile u on u.Id = r.UserId
+                                       WHERE r.Id = @id";
+
+                    DbUtils.AddParameter(cmd, "@id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        Recipe recipe = null;
+                        if (reader.Read())
+                        {
+                            recipe = new Recipe()
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name"),
+                                Description = DbUtils.GetString(reader, "Description"),
+                                Instructions = DbUtils.GetString(reader, "Instructions"),
+                                PrepTime = DbUtils.GetInt(reader, "PrepTime"),
+                                CreateTime = DbUtils.GetDateTime(reader, "CreateTime"),
+                                Profile = new UserProfile()
+                                {
+                                    Name = DbUtils.GetString(reader, "UserName"),
+                                }
+                            };
+                        }
+                        return recipe;
+                    }
+                }
+            }
+        }
     }
 }
