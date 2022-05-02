@@ -26,10 +26,9 @@ namespace CookBook.Repositories
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
 
-                        List<Recipe> recipes = null;
+                        List<Recipe> recipes = new List<Recipe>();
                         while (reader.Read())
                         {
-                            recipes = new List<Recipe>();
                             recipes.Add(new Recipe()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
@@ -39,7 +38,7 @@ namespace CookBook.Repositories
                                 CreateTime = DbUtils.GetDateTime(reader, "CreateTime"),
                                 Profile = new UserProfile()
                                 {
-                                    Name = DbUtils.GetString(reader, "UserNameName"),
+                                    Name = DbUtils.GetString(reader, "UserName"),
                                 }
                             });
                         }
