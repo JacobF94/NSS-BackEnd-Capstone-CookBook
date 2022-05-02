@@ -8,9 +8,9 @@ VALUES (1, '92J8lNpkQ2baJ6KmrJ9QBI1t0xb2', 'Jacob', 'jacob@mail.com', 'Hi, I am 
 SET identity_insert [UserProfile] OFF;
 
 SET identity_insert [Recipe] on;
-INSERT INTO [Recipe] ([Id], [Name], [Description], [PrepTime], [CreateTime], [UserId], [PictureUrl])
-VALUES (1, 'Chili', 'A big ol pot of beans and ground turkey!', 360, '2022-04-28', 1, null),
-		(2, 'Tacos', 'Best served with a cold Corona', 20, '2022-04-29', 2, null);
+INSERT INTO [Recipe] ([Id], [Name], [Description], [Instructions], [PrepTime], [CreateTime], [UserId], [PictureUrl])
+VALUES (1, 'Chili', 'A big ol pot of beans and ground turkey!', 'Step by step instructions on how to make this dish', 360, '2022-04-28', 1, null),
+		(2, 'Tacos', 'Best served with a cold Corona', 'Step by step instructions on how to make this dish', 20, '2022-04-29', 2, null);
 SET identity_insert [Recipe] off;
 
 SET identity_insert [Tag] on;

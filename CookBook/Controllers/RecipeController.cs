@@ -26,5 +26,11 @@ namespace CookBook.Controllers
             List<Recipe> recipes = _recipeRepo.GetAllRecipes();
             return Ok(recipes);
         }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            return Ok(_recipeRepo.GetRecipe(id));
+        }
     }
 }
