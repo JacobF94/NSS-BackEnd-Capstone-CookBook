@@ -25,7 +25,10 @@ const _saveUser = (userProfile) => {
     }).then(resp => resp.json()));
 };
 
-
+const _checkUser = (userName) => {
+  return fetch(`${_apiUrl}/Profile/Register/${userName}`)
+    .then((res) => res.json())
+};
 
 export const getToken = () => firebase.auth().currentUser.getIdToken();
 
@@ -51,13 +54,18 @@ export const logout = () => {
   firebase.auth().signOut()
 };
 
-
 export const register = (userProfile, password) => {
-  return firebase.auth().createUserWithEmailAndPassword(userProfile.email, password)
-    .then((createResponse) => _saveUser({
-      ...userProfile,
-      firebaseUserId: createResponse.user.uid
-    }));
+  return _checkUser(userProfile.name).then(userNameAvailable => {
+    if (userNameAvailable) {
+      return firebase.auth().createUserWithEmailAndPassword(userProfile.email, password)
+      .then((createResponse) => _saveUser({
+        ...userProfile,
+        firebaseUserId: createResponse.user.uid
+      }));
+    } else {
+      return userNameAvailable;
+    }
+  })
 };
 
 
@@ -67,19 +75,25 @@ export const onLoginStatusChange = (onLoginStatusChangeHandler) => {
   });
 };
 
-export const getAllUsers = () => {
+// export const getAllUsers = () => {
+//   return getToken().then((token) => {
+//     return fetch(_apiUrl, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     }).then((resp) => {
+//       if (resp.ok) {
+//         return resp.json();
+//       } else {
+//         throw new Error("An error occurred retrieving user profiles");
+//       }
+//     });
+//   });
+// };
+
+export const getUser = () => {
   return getToken().then((token) => {
-    return fetch(_apiUrl, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((resp) => {
-      if (resp.ok) {
-        return resp.json();
-      } else {
-        throw new Error("An error occurred retrieving user profiles");
-      }
-    });
-  });
-};
+    return fetch(_apiUrl, )
+  })
+}

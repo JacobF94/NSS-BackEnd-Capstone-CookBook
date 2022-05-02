@@ -18,9 +18,14 @@ export default function Register() {
     } else {
       const userProfile = { name, email };
       register(userProfile, password)
-        .then(() => history.push("/"));
-    }
- };
+        .then((check) => {
+          if(check) {
+            history.push("/");
+          } else {
+            window.alert("User name already taken!!!")
+          }
+    })
+ }};
 
   return (
     <Form onSubmit={registerClick}>

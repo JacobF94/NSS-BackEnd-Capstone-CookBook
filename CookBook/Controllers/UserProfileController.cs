@@ -34,15 +34,26 @@ namespace CookBook.Controllers
             return Ok();
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("Profile/{userName}")]
+        public IActionResult Get(string userName)
         {
-            var user = _userProfileRepository.GetUser(id);
+            var user = _userProfileRepository.GetUser(userName);
             if (user == null)
             {
                 return NotFound();
             }
             return Ok(user);
+        }
+
+        [HttpGet("Profile/Register/{userName}")]
+        public IActionResult Verify(string userName)
+        {
+            var user = _userProfileRepository.GetUser(userName);
+            if (user == null)
+            {
+                return Ok(true);
+            }
+            return Ok(false);
         }
 
         [HttpPost]

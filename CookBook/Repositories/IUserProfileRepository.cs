@@ -7,7 +7,7 @@ namespace CookBook.Repositories
     {
         void Add(UserProfile userProfile);
         void Delete(int id);
-        UserProfile GetUser(int id);
+        UserProfile GetUser(string userName);
         UserProfile GetByFirebaseUserId(string firebaseUserId);
         void Update(UserProfile userProfile);
     }
