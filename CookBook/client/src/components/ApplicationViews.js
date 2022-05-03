@@ -5,6 +5,7 @@ import Register from "./Register";
 import Homepage from "./Homepage";
 import RecipeList from "./Recipes/RecipeList";
 import RecipeDetails from "./Recipes/RecipeDetail";
+import UserDetails from "./UserProfiles/UserDetail";
 
 export default function ApplicationViews({ isLoggedIn }) {
   return (
@@ -21,6 +22,10 @@ export default function ApplicationViews({ isLoggedIn }) {
 
         <Route path="/recipes/:recipeId(\d+)">
         {isLoggedIn ? <RecipeDetails /> : <Redirect to="/login" />}
+        </Route>
+
+        <Route path="/profile/:userName">
+        {isLoggedIn ? <UserDetails /> : <Redirect to="/login" />}
         </Route>
 
         <Route path="/login">

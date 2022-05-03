@@ -21,5 +21,6 @@ namespace CookBook.Models
         public string Email { get; set; }
 
         public DateTime CreateTime { get; set; }
+        public List<Recipe> Recipes { get; set; }
     }
 }

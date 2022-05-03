@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getRecipeDetails } from "../../modules/recipeManager";
 import { useParams } from "react-router-dom";
 import { Card, CardBody, CardFooter, CardSubtitle, CardText, CardTitle } from "reactstrap";
+import { Link } from "react-router-dom";
 
 const RecipeDetails = () => {
     const [recipe, setRecipe] = useState(null);
@@ -22,7 +23,9 @@ const RecipeDetails = () => {
                     <CardTitle tag="h1">{recipe.name}</CardTitle>
                     <CardSubtitle className="mb-2 text-muted" tag="h2">{recipe.description}</CardSubtitle>
                     <CardText>{recipe.instructions}</CardText>
-                    <CardFooter>Recipe made by {recipe.profile.name}</CardFooter>
+                    <CardFooter>
+                        <Link to={`/profile/${recipe.profile.name}`}>Recipe made by {recipe.profile.name}</Link>
+                    </CardFooter>
                 </CardBody>
             </Card>
     );

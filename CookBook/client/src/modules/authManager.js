@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 
-const _apiUrl = "/api/userprofile";
+const _apiUrl = "/api/UserProfile";
 
 const _doesUserExist = (firebaseUserId) => {
   return getToken().then((token) =>
@@ -75,25 +75,19 @@ export const onLoginStatusChange = (onLoginStatusChangeHandler) => {
   });
 };
 
-// export const getAllUsers = () => {
-//   return getToken().then((token) => {
-//     return fetch(_apiUrl, {
-//       method: "GET",
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     }).then((resp) => {
-//       if (resp.ok) {
-//         return resp.json();
-//       } else {
-//         throw new Error("An error occurred retrieving user profiles");
-//       }
-//     });
-//   });
-// };
-
-export const getUser = () => {
+export const getUser = (name) => {
   return getToken().then((token) => {
-    return fetch(_apiUrl, )
-  })
-}
+    return fetch(`${_apiUrl}/Profile/${name}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((resp) => {
+      if (resp.ok) {
+        return resp.json();
+      } else {
+        throw new Error("An error occured retrieving the user");
+      }
+    });
+  });
+};
