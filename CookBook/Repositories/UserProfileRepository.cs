@@ -20,9 +20,10 @@ namespace CookBook.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                           SELECT Id, Name, Bio, Email, CreateTime
-                           FROM UserProfile
-                           WHERE Name = @userName";
+                           SELECT u.Id, u.Name, u.Bio, u.CreateTime, r.Name as 'recipeName', r.Id AS 'recipeId'
+                           FROM UserProfile u
+                           JOIN Recipe r ON r.UserId = u.Id
+                           WHERE u.Name = @userName";
 
                     DbUtils.AddParameter(cmd, "@userName", userName);
 
@@ -30,16 +31,25 @@ namespace CookBook.Repositories
                     {
 
                         UserProfile user = null;
-                        if (reader.Read())
+                        while (reader.Read())
                         {
-                            user = new UserProfile()
+                            if (user == null)
                             {
-                                Id = DbUtils.GetInt(reader, "Id"),
-                                Name = DbUtils.GetString(reader, "Name"),
-                                Bio = DbUtils.GetString(reader, "Bio"),
-                                Email = DbUtils.GetString(reader, "Email"),
-                                CreateTime = DbUtils.GetDateTime(reader, "CreateTime")
-                            };
+                                user = new UserProfile()
+                                {
+                                    Id = DbUtils.GetInt(reader, "Id"),
+                                    Name = DbUtils.GetString(reader, "Name"),
+                                    Bio = DbUtils.GetString(reader, "Bio"),
+                                    CreateTime = DbUtils.GetDateTime(reader, "CreateTime"),
+                                    Recipes = new List<Recipe>()
+                                };
+                            }
+
+                            user.Recipes.Add(new Recipe()
+                            {
+                                Id = DbUtils.GetInt(reader, "recipeId"),
+                                Name = DbUtils.GetString(reader, "recipeName")
+                            });
                         }
 
                         return user;
