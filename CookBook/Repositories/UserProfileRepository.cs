@@ -66,28 +66,40 @@ namespace CookBook.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                           SELECT Id, FirebaseUserId, Name, Bio, Email, CreateTime
-                           FROM UserProfile
-                           WHERE FirebaseUserId = @FirebaseuserId";
+                                       SELECT u.Id, u.Name, u.Bio, u.CreateTime, r.Name as 'recipeName', r.Id AS 'recipeId'
+                                       FROM UserProfile u
+                                       JOIN Recipe r ON r.UserId = u.Id
+                                       WHERE u.FirebaseUserId = @FirebaseuserId";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
 
-                    var reader = cmd.ExecuteReader();
-                    UserProfile user = null;
-                    if (reader.Read())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        user = new UserProfile()
-                        {
-                            Id = DbUtils.GetInt(reader, "Id"),
-                            Name = DbUtils.GetString(reader, "Name"),
-                            Bio = DbUtils.GetString(reader, "Bio"),
-                            Email = DbUtils.GetString(reader, "Email"),
-                            CreateTime = DbUtils.GetDateTime(reader, "CreateTime")
-                        };
-                    }
-                    reader.Close();
 
-                    return user;
+                        UserProfile user = null;
+                        while (reader.Read())
+                        {
+                            if (user == null)
+                            {
+                                user = new UserProfile()
+                                {
+                                    Id = DbUtils.GetInt(reader, "Id"),
+                                    Name = DbUtils.GetString(reader, "Name"),
+                                    Bio = DbUtils.GetString(reader, "Bio"),
+                                    CreateTime = DbUtils.GetDateTime(reader, "CreateTime"),
+                                    Recipes = new List<Recipe>()
+                                };
+                            }
+
+                            user.Recipes.Add(new Recipe()
+                            {
+                                Id = DbUtils.GetInt(reader, "recipeId"),
+                                Name = DbUtils.GetString(reader, "recipeName")
+                            });
+                        }
+
+                        return user;
+                    }
                 }
             }
         }

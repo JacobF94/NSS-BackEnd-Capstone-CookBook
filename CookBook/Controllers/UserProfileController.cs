@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using CookBook.Repositories;
 using CookBook.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace CookBook.Controllers
 {
@@ -61,6 +62,19 @@ namespace CookBook.Controllers
             return Ok(false);
         }
 
+        [HttpGet("MyProfile")]
+        public IActionResult GetMyProfile()
+        {
+            var user = _userProfileRepository.GetByFirebaseUserId(GetCurrentUserProfileId());
+            List<Tag> tags = _tagRepository.GetTagsByUser(user.Id);
+            user.Tags = tags;
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
         [HttpPost]
         public IActionResult Post(UserProfile userProfile)
         {
@@ -87,6 +101,11 @@ namespace CookBook.Controllers
         {
             _userProfileRepository.Delete(id);
             return NoContent();
+        }
+        private string GetCurrentUserProfileId()
+        {
+            string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return id;
         }
     }
 }

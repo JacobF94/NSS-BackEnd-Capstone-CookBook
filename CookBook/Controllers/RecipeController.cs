@@ -44,5 +44,12 @@ namespace CookBook.Controllers
             List<Recipe> recipes = _recipeRepo.HomepageRecipes();
             return Ok(recipes);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _recipeRepo.Delete(id);
+            return NoContent();
+        }
     }
 }
