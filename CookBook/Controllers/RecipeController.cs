@@ -37,5 +37,12 @@ namespace CookBook.Controllers
             recipe.Tags = tags;
             return Ok(recipe);
         }
+
+        [HttpGet("Homepage")]
+        public IActionResult GetHopepageRecipes()
+        {
+            List<Recipe> recipes = _recipeRepo.HomepageRecipes();
+            return Ok(recipes);
+        }
     }
 }
