@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CookBook.Models
 {
@@ -12,5 +13,6 @@ namespace CookBook.Models
         public DateTime CreateTime { get; set; }
         public int UserId { get; set; }
         public UserProfile Profile { get; set; }
+        public List<Tag> Tags { get; set; }
     }
 }

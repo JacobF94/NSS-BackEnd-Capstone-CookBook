@@ -20,10 +20,10 @@ namespace CookBook.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                           SELECT u.Id, u.Name, u.Bio, u.CreateTime, r.Name as 'recipeName', r.Id AS 'recipeId'
-                           FROM UserProfile u
-                           JOIN Recipe r ON r.UserId = u.Id
-                           WHERE u.Name = @userName";
+                                       SELECT u.Id, u.Name, u.Bio, u.CreateTime, r.Name as 'recipeName', r.Id AS 'recipeId'
+                                       FROM UserProfile u
+                                       JOIN Recipe r ON r.UserId = u.Id
+                                       WHERE u.Name = @userName";
 
                     DbUtils.AddParameter(cmd, "@userName", userName);
 

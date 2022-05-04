@@ -26,6 +26,7 @@ namespace CookBook
         {
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IRecipeRepository, RecipeRepository>();
+            services.AddTransient<ITagRepository, TagRepository>();
 
 
             var firebaseProjectId = Configuration.GetValue<string>("FirebaseProjectId");

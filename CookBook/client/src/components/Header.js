@@ -24,7 +24,7 @@ export default function Header({ isLoggedIn }) {
     <div>
       <Navbar color="light" light expand="md">
         <NavbarBrand tag={RRNavLink} to="/">
-          Tabloid
+          CookBook!
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>

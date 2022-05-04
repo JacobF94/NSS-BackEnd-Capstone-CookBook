@@ -14,6 +14,7 @@ const RecipeDetails = () => {
     useEffect(() => {
         getRecipe(recipeId);
     }, [])
+
     if (recipe === null) {
         return null
     }
@@ -24,7 +25,11 @@ const RecipeDetails = () => {
                     <CardSubtitle className="mb-2 text-muted" tag="h2">{recipe.description}</CardSubtitle>
                     <CardText>{recipe.instructions}</CardText>
                     <CardFooter>
-                        <Link to={`/profile/${recipe.profile.name}`}>Recipe made by {recipe.profile.name}</Link>
+                        <div><Link to={`/profile/${recipe.profile.name}`}>Recipe made by {recipe.profile.name}</Link></div>
+                        <div>Recipe Tags: <ul>{recipe.tags.map((tag) => {
+                            return <li>{tag.name}</li>
+                        })}
+                        </ul></div>
                     </CardFooter>
                 </CardBody>
             </Card>

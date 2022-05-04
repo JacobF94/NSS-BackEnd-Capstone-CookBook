@@ -3,6 +3,7 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using CookBook.Repositories;
 using CookBook.Models;
+using System.Collections.Generic;
 
 namespace CookBook.Controllers
 {
@@ -11,10 +12,12 @@ namespace CookBook.Controllers
     public class UserProfileController : ControllerBase
     {
         private readonly IUserProfileRepository _userProfileRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public UserProfileController(IUserProfileRepository userProfileRepository)
+        public UserProfileController(IUserProfileRepository userProfileRepository, ITagRepository tagRepository)
         {
             _userProfileRepository = userProfileRepository;
+            _tagRepository = tagRepository;
         }
 
         [HttpGet("{firebaseUserId}")]
@@ -38,6 +41,8 @@ namespace CookBook.Controllers
         public IActionResult Get(string userName)
         {
             var user = _userProfileRepository.GetUser(userName);
+            List<Tag> tags = _tagRepository.GetTagsByUser(user.Id);
+            user.Tags = tags;
             if (user == null)
             {
                 return NotFound();

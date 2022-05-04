@@ -14,10 +14,12 @@ namespace CookBook.Controllers
     public class RecipeController : ControllerBase
     {
         private readonly IRecipeRepository _recipeRepo;
+        private readonly ITagRepository _tagRepo;
 
-        public RecipeController(IRecipeRepository recipeRepository)
+        public RecipeController(IRecipeRepository recipeRepository, ITagRepository tagRepository)
         {
             _recipeRepo = recipeRepository;
+            _tagRepo = tagRepository;
         }
 
         [HttpGet]
@@ -30,7 +32,10 @@ namespace CookBook.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return Ok(_recipeRepo.GetRecipe(id));
+            Recipe recipe = _recipeRepo.GetRecipe(id);
+            List<Tag> tags = _tagRepo.GetTagsByRecipe(id);
+            recipe.Tags = tags;
+            return Ok(recipe);
         }
     }
 }
