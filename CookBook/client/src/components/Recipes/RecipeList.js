@@ -14,22 +14,21 @@ const RecipeList = () => {
     useEffect(() => {
       getRecipes();
     }, []);
-  
     return (
-      <div className="container">
-        <div className="row justify-content-center">
-          <ListGroup>
-            {recipes.map((recipe) => {
-              return (
-                <ListGroupItem key={recipe.id}>
-                  <Recipe recipe={recipe} />
-                  <Link to={`/recipes/${recipe.id}`}>Details</Link>
-                </ListGroupItem>
-              );
-            })}
-          </ListGroup>
+        <div className="container">
+          <div className="row justify-content-center">
+            <ListGroup>
+              {recipes.map((recipe) => {
+                return (
+                  <ListGroupItem key={recipe.id}>
+                    <Recipe recipe={recipe} />
+                    <Link to={`/recipes/${recipe.id}`}>Details</Link>
+                  </ListGroupItem>
+                );
+              })}
+            </ListGroup>
+          </div>
         </div>
-      </div>
     );
   };
   

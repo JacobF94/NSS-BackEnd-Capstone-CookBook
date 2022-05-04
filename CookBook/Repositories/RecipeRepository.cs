@@ -87,5 +87,35 @@ namespace CookBook.Repositories
                 }
             }
         }
+        public List<Recipe> HomepageRecipes()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT TOP 3 Id, Name, Description 
+                                        FROM Recipe
+                                        ORDER BY CreateTime desc";
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        List<Recipe> recipes = new List<Recipe>();
+                        while (reader.Read())
+                        {
+                            recipes.Add(new Recipe()
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name"),
+                                Description = DbUtils.GetString(reader, "Description")
+                            });
+                        }
+
+                        return recipes;
+                    }
+                }
+            }
+        }
     }
 }

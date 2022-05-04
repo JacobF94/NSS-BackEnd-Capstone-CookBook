@@ -7,5 +7,6 @@ namespace CookBook.Repositories
     {
         List<Recipe> GetAllRecipes();
         Recipe GetRecipe(int id);
+        List<Recipe> HomepageRecipes();
     }
 }
