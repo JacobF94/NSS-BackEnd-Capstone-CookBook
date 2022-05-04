@@ -22,5 +22,6 @@ namespace CookBook.Models
 
         public DateTime CreateTime { get; set; }
         public List<Recipe> Recipes { get; set; }
+        public List<Tag> Tags { get; set; }
     }
 }

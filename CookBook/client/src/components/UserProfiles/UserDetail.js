@@ -37,6 +37,13 @@ const UserDetails = () => {
                     })}
                     </ul>
                 </CardText>
+                <CardFooter>
+                    Liked tags: <ul>
+                        {user.tags.map((tag) => {
+                            return <li>{tag.name}</li>
+                        })}
+                    </ul>
+                </CardFooter>
             </CardBody>
         </Card>
     );
