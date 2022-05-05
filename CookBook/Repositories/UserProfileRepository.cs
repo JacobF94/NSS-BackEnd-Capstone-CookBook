@@ -68,8 +68,8 @@ namespace CookBook.Repositories
                     cmd.CommandText = @"
                                        SELECT u.Id, u.Name, u.Bio, u.CreateTime, r.Name as 'recipeName', r.Id AS 'recipeId'
                                        FROM UserProfile u
-                                       JOIN Recipe r ON r.UserId = u.Id
-                                       WHERE u.FirebaseUserId = @FirebaseuserId";
+                                       LEFT JOIN Recipe r ON r.UserId = u.Id
+                                       WHERE u.FirebaseUserId = @FirebaseUserId";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
 
@@ -90,12 +90,14 @@ namespace CookBook.Repositories
                                     Recipes = new List<Recipe>()
                                 };
                             }
-
-                            user.Recipes.Add(new Recipe()
+                            if (DbUtils.IsNotDbNull(reader, "recipeId"))
                             {
-                                Id = DbUtils.GetInt(reader, "recipeId"),
-                                Name = DbUtils.GetString(reader, "recipeName")
-                            });
+                                user.Recipes.Add(new Recipe()
+                                {
+                                    Id = DbUtils.GetInt(reader, "recipeId"),
+                                    Name = DbUtils.GetString(reader, "recipeName")
+                                });
+                            }
                         }
 
                         return user;
@@ -112,10 +114,11 @@ namespace CookBook.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO UserProfile (FirebaseUserId, Name, Bio, Email, CreateTime)
+                        INSERT INTO UserProfile (FirebaseUserId, Name, Email, CreateTime)
                         OUTPUT INSERTED.ID
-                        VALUES (@Name, @Email, @ImageUrl, @DateCreated)";
+                        VALUES (@FirebaseUserId, @Name, @Email, @CreateTime)";
 
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", userProfile.FirebaseUserId);
                     DbUtils.AddParameter(cmd, "@Name", userProfile.Name);
                     DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
                     DbUtils.AddParameter(cmd, "@CreateTime", userProfile.CreateTime);

@@ -18,7 +18,6 @@ export default function Header({ isLoggedIn }) {
   const toggle = () => setIsOpen(!isOpen);
   const handleLogout = () => {
     logout();
-    history.push("/");
   };
   return (
     <div>

@@ -10,7 +10,7 @@ const _doesUserExist = (firebaseUserId) => {
       headers: {
         Authorization: `Bearer ${token}`
       }
-    }).then(resp => resp.ok));
+    }).then((resp) => resp.ok));
 };
 
 const _saveUser = (userProfile) => {
@@ -30,8 +30,9 @@ const _checkUser = (userName) => {
     .then((res) => res.json())
 };
 
-export const getToken = () => firebase.auth().currentUser.getIdToken();
-
+export const getToken = () => {
+  return firebase.auth().currentUser.getIdToken();
+};
 
 export const login = (email, pw) => {
   return firebase.auth().signInWithEmailAndPassword(email, pw)

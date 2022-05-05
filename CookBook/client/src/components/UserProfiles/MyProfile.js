@@ -35,10 +35,10 @@ const MyProfile = () => {
                 <CardText>
                     Check out my recipes!
                     <ul>
-                    {user.recipes.map((x) => {
+                    {user.recipes.map((recipe) => {
                         return (
                         <li>
-                            <Link to={`/recipes/${x.id}`}>{x.name}</Link><Button onClick={handleDelete(x.id)}>Delete</Button>
+                            <Link to={`/recipes/${recipe.id}`}>{recipe.name}</Link><Button onClick={() => {handleDelete(recipe.id)}}>Delete</Button>
                         </li>
                         )
                     })}

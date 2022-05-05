@@ -81,7 +81,7 @@ namespace CookBook.Controllers
             UserProfile newUser = userProfile;
             newUser.CreateTime = DateTime.Now;
             _userProfileRepository.Add(newUser);
-            return CreatedAtAction("Get", new { id = userProfile.Id }, userProfile);
+            return CreatedAtAction("Get", new { userName = userProfile.Name }, userProfile);
         }
 
         [HttpPut("{id}")]

@@ -63,3 +63,9 @@ export const deleteRecipe = (id) => {
     })
   });
 };
+
+export const postRecipe = () => {
+  return getToken().then((token) => {
+    return fetch(`${_apiUrl}`)
+  })
+}
