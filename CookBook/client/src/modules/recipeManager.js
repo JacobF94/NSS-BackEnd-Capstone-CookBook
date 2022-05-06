@@ -52,3 +52,20 @@ export const getHomepageRecipes = () => {
     });
   });
 };
+
+export const deleteRecipe = (id) => {
+  return getToken().then((token) => {
+    return fetch(`${_apiUrl}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  });
+};
+
+export const postRecipe = () => {
+  return getToken().then((token) => {
+    return fetch(`${_apiUrl}`)
+  })
+}

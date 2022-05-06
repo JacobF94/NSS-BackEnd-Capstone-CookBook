@@ -5,6 +5,7 @@ using CookBook.Repositories;
 using CookBook.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace CookBook.Controllers
 {
@@ -15,11 +16,13 @@ namespace CookBook.Controllers
     {
         private readonly IRecipeRepository _recipeRepo;
         private readonly ITagRepository _tagRepo;
+        private readonly IUserProfileRepository _userRepo;
 
-        public RecipeController(IRecipeRepository recipeRepository, ITagRepository tagRepository)
+        public RecipeController(IRecipeRepository recipeRepository, ITagRepository tagRepository, IUserProfileRepository userProfileRepository)
         {
             _recipeRepo = recipeRepository;
             _tagRepo = tagRepository;
+            _userRepo = userProfileRepository;
         }
 
         [HttpGet]
@@ -43,6 +46,29 @@ namespace CookBook.Controllers
         {
             List<Recipe> recipes = _recipeRepo.HomepageRecipes();
             return Ok(recipes);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _recipeRepo.Delete(id);
+            return NoContent();
+        }
+
+        [HttpPost]
+        public IActionResult Post (Recipe recipe)
+        {
+            recipe.CreateTime = DateTime.Now;
+            UserProfile currentUser = GetCurrentUserProfile();
+            recipe.UserId = currentUser.Id;
+            _recipeRepo.Add(recipe);
+            return Ok(recipe);
+        }
+
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userRepo.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }

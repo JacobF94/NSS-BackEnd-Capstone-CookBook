@@ -10,7 +10,7 @@ const _doesUserExist = (firebaseUserId) => {
       headers: {
         Authorization: `Bearer ${token}`
       }
-    }).then(resp => resp.ok));
+    }).then((resp) => resp.ok));
 };
 
 const _saveUser = (userProfile) => {
@@ -30,8 +30,9 @@ const _checkUser = (userName) => {
     .then((res) => res.json())
 };
 
-export const getToken = () => firebase.auth().currentUser.getIdToken();
-
+export const getToken = () => {
+  return firebase.auth().currentUser.getIdToken();
+};
 
 export const login = (email, pw) => {
   return firebase.auth().signInWithEmailAndPassword(email, pw)
@@ -78,6 +79,23 @@ export const onLoginStatusChange = (onLoginStatusChangeHandler) => {
 export const getUser = (name) => {
   return getToken().then((token) => {
     return fetch(`${_apiUrl}/Profile/${name}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((resp) => {
+      if (resp.ok) {
+        return resp.json();
+      } else {
+        throw new Error("An error occured retrieving the user");
+      }
+    });
+  });
+};
+
+export const getCurrentUser = () => {
+  return getToken().then((token) => {
+    return fetch(`${_apiUrl}/MyProfile`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
