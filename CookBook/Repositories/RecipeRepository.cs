@@ -130,5 +130,46 @@ namespace CookBook.Repositories
                 }
             }
         }
+        public void Add(Recipe recipe)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Recipe (Name, Description, Instructions, PrepTime, CreateTime, UserId)
+                                        OUTPUT INSERTED.ID
+                                        VALUES (@name, @description, @instructions, @preptime, @createtime, @userid)";
+                    DbUtils.AddParameter(cmd, "@name", recipe.Name);
+                    DbUtils.AddParameter(cmd, "@description", recipe.Description);
+                    DbUtils.AddParameter(cmd, "@instructions", recipe.Instructions);
+                    DbUtils.AddParameter(cmd, "@preptime", recipe.PrepTime);
+                    DbUtils.AddParameter(cmd, "@createtime", recipe.CreateTime);
+                    DbUtils.AddParameter(cmd, "@userid", recipe.UserId);
+                    recipe.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+        public void Update(Recipe recipe)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Recipe
+                                        SET Name = @name,
+                                            Description = @description,
+                                            Instructions = @instructions,
+                                            PrepTime = @preptime
+                                        WHERE Id = @id";
+                    DbUtils.AddParameter(cmd, "@id", recipe.Id);
+                    DbUtils.AddParameter(cmd, "@name", recipe.Name);
+                    DbUtils.AddParameter(cmd, "@description", recipe.Description);
+                    DbUtils.AddParameter(cmd, "@instructions", recipe.Instructions);
+                    DbUtils.AddParameter(cmd, "@preptime", recipe.PrepTime);
+                }
+            }
+        }
     }
 }

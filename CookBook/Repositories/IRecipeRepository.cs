@@ -9,5 +9,7 @@ namespace CookBook.Repositories
         Recipe GetRecipe(int id);
         List<Recipe> HomepageRecipes();
         void Delete(int id);
+        void Add(Recipe recipe);
+        void Update(Recipe recipe);
     }
 }
