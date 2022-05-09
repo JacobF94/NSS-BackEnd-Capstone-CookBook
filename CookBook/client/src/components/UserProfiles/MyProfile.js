@@ -39,7 +39,7 @@ const MyProfile = () => {
                     {user.recipes.map((recipe) => {
                         return (
                         <li>
-                            <Link to={`/recipes/${recipe.id}`}>{recipe.name}</Link><Button onClick={() => {handleDelete(recipe.id)}}>Delete</Button>
+                            <Link to={`/recipes/${recipe.id}`}>{recipe.name}</Link><Button onClick={() => {history.push(`/recipes/edit/${recipe.id}`)}}>Edit</Button><Button onClick={() => {handleDelete(recipe.id)}}>Delete</Button>
                         </li>
                         )
                     })}

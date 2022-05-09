@@ -12,5 +12,6 @@ namespace CookBook.Repositories
         void Add(Recipe recipe);
         void Update(Recipe recipe);
         void AddRecipeTags(int tagId, int recipeId);
+        Recipe GetToEdit(int id);
     }
 }

@@ -48,6 +48,12 @@ namespace CookBook.Controllers
             return Ok(recipes);
         }
 
+        [HttpGet("ToEdit/{id}")]
+        public IActionResult GetRecipeToEdit(int id)
+        {
+            return Ok(_recipeRepo.GetToEdit(id));
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -56,7 +62,7 @@ namespace CookBook.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post (Recipe recipe)
+        public IActionResult Post(Recipe recipe)
         {
             recipe.CreateTime = DateTime.Now;
             UserProfile currentUser = GetCurrentUserProfile();
@@ -68,6 +74,19 @@ namespace CookBook.Controllers
                 _recipeRepo.AddRecipeTags(tagId, newRecipeId);
             }
 
+            return Ok(recipe);
+        }
+
+        [HttpPut]
+        public IActionResult Update(Recipe recipe)
+        {
+            _recipeRepo.Update(recipe);
+            int recipeId = recipe.Id;
+            _tagRepo.ResetTags(recipeId);
+            foreach (int tagId in recipe.SelectedTagIds)
+            {
+                _recipeRepo.AddRecipeTags(tagId, recipeId);
+            }
             return Ok(recipe);
         }
 

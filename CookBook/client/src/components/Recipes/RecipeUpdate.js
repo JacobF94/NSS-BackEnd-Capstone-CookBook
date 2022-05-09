@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { getRecipeToEdit, updateRecipe } from "../../modules/recipeManager";
 import { FormGroup, Input, Label, Button, Form } from "reactstrap";
-import { postRecipe } from "../../modules/recipeManager";
 import { getAllTags } from "../../modules/tagManager";
 
-const RecipeForm = () => {
+const RecipeUpdate = () => {
     const history = useHistory();
+    const { recipeId } = useParams();
     const emptyRecipe = {
         Name: "",
         Description: "",
@@ -24,6 +26,12 @@ const RecipeForm = () => {
         getTags()
     }, [])
 
+    useEffect(() => {
+        getRecipeToEdit(recipeId).then((recipe) => {
+            recipe.SelectedTagIds = new Set();
+            setRecipe(recipe)})
+    }, recipeId)
+
     const handleInputChange = (evt) => {
         const value = evt.target.value;
         const key = evt.target.id;
@@ -38,17 +46,9 @@ const RecipeForm = () => {
         evt.preventDefault();
         const recipeCopy = { ...recipe };
         recipeCopy.SelectedTagIds = Array.from(recipeCopy.SelectedTagIds)
-        postRecipe(recipeCopy).then((newRecipe) => {
+        updateRecipe(recipeCopy).then((newRecipe) => {
           history.push(`/recipes/${newRecipe.id}`);
         });
-      };
-
-      const SubmitButton = () => {
-        if (recipe.Name && recipe.Description && recipe.Instructions && recipe.PrepTime && recipe.SelectedTagIds.size > 0){
-          return <Button className="btn btn-primary" onClick={handleSave}>Submit</Button>
-        } else {
-          return <Button className="btn btn-primary" disabled>Please enter all information</Button>
-        };
       };
 
       const handleTagCheck = (evt) => {
@@ -67,20 +67,20 @@ const RecipeForm = () => {
       return (
         <Form>
             <FormGroup>
-                <Label for="Name">Name</Label>
-                <Input type="text" name="Name" id="Name" placeholder="Name" value={recipe.Name} onChange={handleInputChange}/>
+                <Label for="name">Name</Label>
+                <Input type="text" name="name" id="name" placeholder="name" value={recipe.name} onChange={handleInputChange}/>
             </FormGroup>
             <FormGroup>
                 <Label for="Description">Description</Label>
-                <Input type="text" name="Description" id="Description" placeholder="Description" value={recipe.Description} onChange={handleInputChange}/>
+                <Input type="text" name="description" id="description" placeholder="description" value={recipe.description} onChange={handleInputChange}/>
             </FormGroup>
             <FormGroup>
                 <Label for="Instructions">Instructions</Label>
-                <Input type="text" name="Instructions" id="Instructions" placeholder="Instructions" value={recipe.Instructions} onChange={handleInputChange}/>
+                <Input type="text" name="instructions" id="instructions" placeholder="instructions" value={recipe.instructions} onChange={handleInputChange}/>
             </FormGroup>
             <FormGroup>
                 <Label for="PrepTime">Prep Time</Label>
-                <Input type="number" name="PrepTime" id="PrepTime" placeholder="PrepTime" value={recipe.PrepTime} onChange={handleInputChange}/>
+                <Input type="number" name="prepTime" id="prepTime" placeholder="prepTime" value={recipe.prepTime} onChange={handleInputChange}/>
             </FormGroup>
             <div>
             Please select tag(s) for your recipe:
@@ -93,10 +93,11 @@ const RecipeForm = () => {
                 </div>
             })}
             </div>
-            <SubmitButton />
+            <Button className="btn btn-primary" onClick={handleSave}>Save Changes</Button>
         </Form>
     )
 
-};
 
-export default RecipeForm;
+}
+
+export default RecipeUpdate;

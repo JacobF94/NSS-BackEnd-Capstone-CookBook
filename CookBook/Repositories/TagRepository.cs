@@ -97,5 +97,20 @@ namespace CookBook.Repositories
                 }
             }
         }
+
+        public void ResetTags(int recipeId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM RecipeTag WHERE RecipeId = @recipeId";
+
+                    DbUtils.AddParameter(cmd, "@recipeId", recipeId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
