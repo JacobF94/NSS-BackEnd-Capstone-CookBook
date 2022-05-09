@@ -62,6 +62,12 @@ namespace CookBook.Controllers
             UserProfile currentUser = GetCurrentUserProfile();
             recipe.UserId = currentUser.Id;
             _recipeRepo.Add(recipe);
+            int newRecipeId = recipe.Id;
+            foreach (int tagId in recipe.SelectedTagIds)
+            {
+                _recipeRepo.AddRecipeTags(tagId, newRecipeId);
+            }
+
             return Ok(recipe);
         }
 

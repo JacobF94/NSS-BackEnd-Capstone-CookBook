@@ -64,8 +64,21 @@ export const deleteRecipe = (id) => {
   });
 };
 
-export const postRecipe = () => {
+export const postRecipe = (recipe) => {
   return getToken().then((token) => {
-    return fetch(`${_apiUrl}`)
+    return fetch(_apiUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recipe),
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("An error occured posting the recipe");
+      }
+    })
   })
 }

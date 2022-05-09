@@ -14,5 +14,6 @@ namespace CookBook.Models
         public int UserId { get; set; }
         public UserProfile Profile { get; set; }
         public List<Tag> Tags { get; set; }
+        public List<int> SelectedTagIds { get; set; }
     }
 }

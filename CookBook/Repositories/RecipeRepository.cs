@@ -137,7 +137,7 @@ namespace CookBook.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO Recipe (Name, Description, Instructions, PrepTime, CreateTime, UserId)
+                    cmd.CommandText = @"INSERT INTO Recipe ([Name], Description, Instructions, PrepTime, CreateTime, UserId)
                                         OUTPUT INSERTED.ID
                                         VALUES (@name, @description, @instructions, @preptime, @createtime, @userid)";
                     DbUtils.AddParameter(cmd, "@name", recipe.Name);
@@ -150,6 +150,24 @@ namespace CookBook.Repositories
                 }
             }
         }
+
+        public void AddRecipeTags(int tagId, int recipeId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                        cmd.CommandText = @"INSERT INTO RecipeTag (RecipeId, TagId)
+                                        VALUES (@recipeId, @tagId)";
+                        DbUtils.AddParameter(cmd, "@recipeId", recipeId);
+                        DbUtils.AddParameter(cmd, "@tagId", tagId);
+
+                        cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public void Update(Recipe recipe)
         {
             using (var conn = Connection)
