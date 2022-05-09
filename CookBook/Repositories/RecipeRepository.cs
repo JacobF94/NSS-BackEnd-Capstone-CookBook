@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using CookBook.Models;
+﻿using CookBook.Models;
 using CookBook.Utils;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace CookBook.Repositories
 {
@@ -186,6 +185,42 @@ namespace CookBook.Repositories
                     DbUtils.AddParameter(cmd, "@description", recipe.Description);
                     DbUtils.AddParameter(cmd, "@instructions", recipe.Instructions);
                     DbUtils.AddParameter(cmd, "@preptime", recipe.PrepTime);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public Recipe GetToEdit(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT Id, Name, Description, Instructions, PrepTime
+                                        FROM Recipe
+                                        WHERE Id = @id";
+
+                    DbUtils.AddParameter(cmd, "@id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        Recipe recipe = null;
+                        if (reader.Read())
+                        {
+                            recipe = new Recipe()
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name"),
+                                Description = DbUtils.GetString(reader, "Description"),
+                                Instructions = DbUtils.GetString(reader, "Instructions"),
+                                PrepTime = DbUtils.GetInt(reader, "PrepTime"),
+                            };
+                        }
+                        return recipe;
+                    }
                 }
             }
         }
