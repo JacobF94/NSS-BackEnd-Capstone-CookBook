@@ -4,11 +4,12 @@ import { useParams } from "react-router-dom";
 import { Card, CardBody, CardFooter, CardSubtitle, CardText, CardTitle, Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import { deleteRecipe } from "../../modules/recipeManager";
+import { useHistory } from "react-router-dom";
 
 const MyProfile = () => {
     const [user, setUser] = useState(null);
     const { userName } = useParams();
-
+    const history = useHistory();
     const getUserDetails = () => {
         getCurrentUser().then((x) => setUser(x));
     };
@@ -43,6 +44,7 @@ const MyProfile = () => {
                         )
                     })}
                     </ul>
+                <Button onClick={() => {history.push("/recipes/create")}}>Upload a new recipe!</Button>
                 </CardText>
                 <CardFooter>
                     Liked tags: <ul>

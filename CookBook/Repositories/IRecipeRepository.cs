@@ -11,5 +11,6 @@ namespace CookBook.Repositories
         void Delete(int id);
         void Add(Recipe recipe);
         void Update(Recipe recipe);
+        void AddRecipeTags(int tagId, int recipeId);
     }
 }
