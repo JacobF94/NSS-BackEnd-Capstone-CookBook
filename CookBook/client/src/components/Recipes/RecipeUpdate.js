@@ -28,7 +28,7 @@ const RecipeUpdate = () => {
 
     useEffect(() => {
         getRecipeToEdit(recipeId).then((recipe) => {
-            recipe.SelectedTagIds = new Set();
+            recipe.SelectedTagIds = new Set(recipe.selectedTagIds);
             setRecipe(recipe)})
     }, recipeId)
 
@@ -86,7 +86,7 @@ const RecipeUpdate = () => {
             Please select tag(s) for your recipe:
             {tags.map((tag) => {
                 return <div>
-                            <input type="checkbox" value={tag.id} onChange={(evt) => handleTagCheck(evt)} />
+                            <input type="checkbox" checked={recipe.SelectedTagIds.has(tag.id)} value={tag.id} onChange={(evt) => handleTagCheck(evt)} />
                             <label>
                             {tag.name}
                             </label>

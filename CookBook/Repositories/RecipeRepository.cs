@@ -198,9 +198,10 @@ namespace CookBook.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, Name, Description, Instructions, PrepTime
-                                        FROM Recipe
-                                        WHERE Id = @id";
+                    cmd.CommandText = @"SELECT r.Id, r.Name, r.Description, r.Instructions, r.PrepTime, t.TagId
+                                        FROM Recipe r
+                                        LEFT JOIN RecipeTag t ON t.RecipeId = r.Id
+                                        WHERE r.Id = @id";
 
                     DbUtils.AddParameter(cmd, "@id", id);
 
@@ -208,16 +209,21 @@ namespace CookBook.Repositories
                     {
 
                         Recipe recipe = null;
-                        if (reader.Read())
+                        while (reader.Read())
                         {
-                            recipe = new Recipe()
+                            if (recipe.Id == 0)
                             {
-                                Id = DbUtils.GetInt(reader, "Id"),
-                                Name = DbUtils.GetString(reader, "Name"),
-                                Description = DbUtils.GetString(reader, "Description"),
-                                Instructions = DbUtils.GetString(reader, "Instructions"),
-                                PrepTime = DbUtils.GetInt(reader, "PrepTime"),
-                            };
+                                recipe = new Recipe()
+                                {
+                                    Id = DbUtils.GetInt(reader, "Id"),
+                                    Name = DbUtils.GetString(reader, "Name"),
+                                    Description = DbUtils.GetString(reader, "Description"),
+                                    Instructions = DbUtils.GetString(reader, "Instructions"),
+                                    PrepTime = DbUtils.GetInt(reader, "PrepTime"),
+                                    SelectedTagIds = new List<int>()
+                                };
+                            }
+                            recipe.SelectedTagIds.Add(DbUtils.GetInt(reader, "TagId"));
                         }
                         return recipe;
                     }
