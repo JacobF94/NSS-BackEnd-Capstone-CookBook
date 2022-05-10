@@ -208,7 +208,7 @@ namespace CookBook.Repositories
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
 
-                        Recipe recipe = null;
+                        Recipe recipe = new();
                         while (reader.Read())
                         {
                             if (recipe.Id == 0)
